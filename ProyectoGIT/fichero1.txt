@@ -1,1 +1,3 @@
 Nuevo cambio del fichero1
+Segunda linea de fichero1
+Tercera linea de fichero1
