@@ -1,3 +1,5 @@
 greeting: Hello world!
-my.number: 100
-new.property: new.property no tiene valor
+my:
+  number: 100
+new:
+  property: new.property no tiene valor
