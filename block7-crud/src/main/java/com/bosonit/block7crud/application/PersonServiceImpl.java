@@ -1,5 +1,6 @@
 package com.bosonit.block7crud.application;
 
+import com.bosonit.block7crud.controller.dto.PersonInputDto;
 import com.bosonit.block7crud.domain.Person;
 import com.bosonit.block7crud.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;

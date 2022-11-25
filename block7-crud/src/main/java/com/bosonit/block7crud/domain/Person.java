@@ -1,5 +1,6 @@
 package com.bosonit.block7crud.domain;
 
+import com.bosonit.block7crud.controller.dto.PersonInputDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
