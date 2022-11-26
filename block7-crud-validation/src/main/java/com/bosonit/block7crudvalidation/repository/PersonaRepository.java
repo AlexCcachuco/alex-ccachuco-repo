@@ -4,7 +4,9 @@ import com.bosonit.block7crudvalidation.controller.dto.PersonaOutputDto;
 import com.bosonit.block7crudvalidation.domain.Persona;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PersonaRepository extends JpaRepository<Persona, Integer> {
-    Persona findByUsuario(String name);
+    Optional<Persona> findByUsuario(String name);
 
 }

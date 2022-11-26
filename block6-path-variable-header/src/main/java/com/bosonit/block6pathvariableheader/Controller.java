@@ -20,8 +20,8 @@ public class Controller {
     @PutMapping(value = "/post")
     public HashMap<String,String> getValues(@RequestParam String var1, @RequestParam String var2){
         HashMap<String,String> hashMap= new HashMap<String,String>();
-        hashMap.put("var1", var1);
-        hashMap.put("var2", var2);
+        hashMap.put("saludo", var1);
+        hashMap.put("despedida", var2);
         return hashMap;
     }
 }
