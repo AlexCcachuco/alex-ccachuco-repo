@@ -1,12 +1,14 @@
 package com.bosonit.block7crudvalidation.controller;
 
 import com.bosonit.block7crudvalidation.application.PersonaServiceImpl;
+import com.bosonit.block7crudvalidation.application.ProfessorServiceImpl;
 import com.bosonit.block7crudvalidation.controller.dto.PersonaDTO;
-import com.bosonit.block7crudvalidation.controller.dto.PersonaProfessorListDTO;
+import com.bosonit.block7crudvalidation.controller.dto.ProfessorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,8 @@ public class PersonaController {
 
     @Autowired
     PersonaServiceImpl personServiceImpl;
+
+
 
     @PostMapping
     public ResponseEntity<PersonaDTO> addPerson(@RequestBody PersonaDTO personaInputDto)   {
@@ -63,7 +67,13 @@ public class PersonaController {
         return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaById(id)));
     }
 
+     @GetMapping("/profesor/{id}")
+    public ResponseEntity<ProfessorDTO> getProfesor(@PathVariable int id){
+        return ResponseEntity.ok(personServiceImpl.getProfessorById(id));
+    }
 
-
-
+    @GetMapping("/profesorFeign/{id}")
+    public ResponseEntity<ProfessorDTO> getProfesorByFeign(@PathVariable int id){
+        return ResponseEntity.ok(personServiceImpl.getProfessorByIdFeign(id));
+    }
 }

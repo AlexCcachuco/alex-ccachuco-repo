@@ -1,7 +1,9 @@
 package com.bosonit.block7crudvalidation.application;
 
+import com.bosonit.block7crudvalidation.IFeignProfessor;
 import com.bosonit.block7crudvalidation.controller.dto.PersonaDTO;
 import com.bosonit.block7crudvalidation.controller.dto.PersonaProfessorListDTO;
+import com.bosonit.block7crudvalidation.controller.dto.ProfessorDTO;
 import com.bosonit.block7crudvalidation.domain.Persona;
 import com.bosonit.block7crudvalidation.domain.Professor;
 import com.bosonit.block7crudvalidation.domain.Student;
@@ -15,7 +17,9 @@ import com.bosonit.block7crudvalidation.repository.ProfessorRepository;
 import com.bosonit.block7crudvalidation.repository.StudentRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,11 @@ public class PersonaServiceImpl implements PersonaService{
     @Autowired
     ProfessorRepository professorRepo;
 
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    IFeignProfessor feignProfessor;
 
     PersonaMapper mapper = Mappers.getMapper(PersonaMapper.class);
     StudentMapper mapperStudent= Mappers.getMapper(StudentMapper.class);
@@ -100,5 +109,15 @@ public class PersonaServiceImpl implements PersonaService{
         return (!Objects.isNull(student)) ?
                 Optional.ofNullable(mapperStudent.studentToPersonaStudentDTO(student)) :
                 Optional.ofNullable(mapperProfessor.studentToPersonaProfessorDTO(professor));
+    }
+
+
+    public ProfessorDTO getProfessorById(int id){
+        ProfessorDTO professor = restTemplate.getForObject("http://localhost:8080/profesor/{id}", ProfessorDTO.class, id);
+        return professor;
+    }
+    public ProfessorDTO getProfessorByIdFeign(int id){
+        ProfessorDTO professorDTO = feignProfessor.callProfessor(id);
+        return professorDTO;
     }
 }
