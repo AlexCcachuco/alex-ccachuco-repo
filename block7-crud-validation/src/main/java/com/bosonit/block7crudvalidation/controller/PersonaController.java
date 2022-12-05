@@ -63,10 +63,6 @@ public class PersonaController {
         return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaById(id)));
     }
 
-//    @GetMapping(value = "/allPersona")
-//    public List<PersonaProfessorListDTO> getAllPersonas() {
-//        return personServiceImpl.findAllPrueba();
-//    }
 
 
 

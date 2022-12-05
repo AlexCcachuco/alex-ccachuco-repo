@@ -38,14 +38,9 @@ public class StudentServiceImpl implements StudentService {
     AsignaturaMapper asignaturaMapper = Mappers.getMapper(AsignaturaMapper.class);
 
     public StudentDTO createStudent(StudentDTO studentDto){
-
-        System.out.println(studentDto.toString() + " dto");
         Persona persona = personaRepo.findById(studentDto.getId_persona()).orElseThrow();
         Student student = mapper.studentDtoToStudent(studentDto);
-
         student.setPersona(persona);
-
-        System.out.println(student.toString()+ " object");
         studentRepo.save(student);
         return mapper.studentToStudentDTO(student);
     }
