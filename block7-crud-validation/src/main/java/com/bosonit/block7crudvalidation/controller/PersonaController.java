@@ -1,54 +1,73 @@
 package com.bosonit.block7crudvalidation.controller;
 
 import com.bosonit.block7crudvalidation.application.PersonaServiceImpl;
-import com.bosonit.block7crudvalidation.controller.dto.PersonaInputDto;
-import com.bosonit.block7crudvalidation.controller.dto.PersonaOutputDto;
-import com.bosonit.block7crudvalidation.domain.Persona;
-import com.bosonit.block7crudvalidation.exceptions.EntityNotFoundException;
-import com.bosonit.block7crudvalidation.exceptions.UnprocessableEntityException;
-import org.apache.coyote.Response;
+import com.bosonit.block7crudvalidation.controller.dto.PersonaDTO;
+import com.bosonit.block7crudvalidation.controller.dto.PersonaProfessorListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/persona")
 public class PersonaController {
 
     @Autowired
     PersonaServiceImpl personServiceImpl;
 
-    @PostMapping(value = "/persona")
-    public ResponseEntity<PersonaOutputDto> addPerson(@RequestBody PersonaInputDto personaInputDto)   {
+    @PostMapping
+    public ResponseEntity<PersonaDTO> addPerson(@RequestBody PersonaDTO personaInputDto)   {
          return ResponseEntity.ok(personServiceImpl.addPersona(personaInputDto));
     }
-
-    @GetMapping(value = "/persona/{id}")
-    public ResponseEntity<PersonaOutputDto> getById(@PathVariable int id) {
-        return ResponseEntity.ok(personServiceImpl.getPersonaById(id));
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<?> getStudentOrProfessorByName(@PathVariable String name, @RequestParam(required = false) String outputType){
+        if(outputType !=null && !outputType.isBlank()){
+            if(outputType.equals("simple")){
+                return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaByName(name)));
+            } else if(outputType.equals("full")){
+                return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getStudentOrProfessorByName(name)));
+            }
+        }
+        return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaByName(name)));
     }
 
-    @GetMapping(value = "/persona/name/{name}")
-    public ResponseEntity<PersonaOutputDto> getByName(@PathVariable String name) {
-        return ResponseEntity.ok(personServiceImpl.getPersonaByName(name));
-    }
-
-    @GetMapping(value = "/personas")
-    public List<PersonaOutputDto> getAll() {
+    @GetMapping(value = "/all")
+    public List<PersonaDTO> getAll() {
         return personServiceImpl.getAllPersonas();
     }
 
-    @DeleteMapping(value = "/persona/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deletePersona(@PathVariable int id)  {
             personServiceImpl.getPersonaById(id);
             personServiceImpl.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Deleted correctly!");
     }
-    @PutMapping(value = "/persona/{id}")
-    public ResponseEntity<PersonaOutputDto> update(@PathVariable int id, @RequestBody PersonaInputDto personaDTO){
-            return ResponseEntity.ok().body(personServiceImpl.updatePersona(personaDTO,id));
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<PersonaDTO> update(@PathVariable int id, @RequestBody PersonaDTO personaDto){
+            return ResponseEntity.ok().body(personServiceImpl.updatePersona(personaDto,id));
 
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getStudentOrProfessorByIdPerson(@PathVariable int id, @RequestParam(required = false) String outputType){
+        if(outputType !=null && !outputType.isBlank()){
+            if(outputType.equals("simple")){
+                return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaById(id)));
+            } else if(outputType.equals("full")){
+                return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getStudentOrProfessorByIdPersona(id)));
+            }
+        }
+        return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaById(id)));
+    }
+
+//    @GetMapping(value = "/allPersona")
+//    public List<PersonaProfessorListDTO> getAllPersonas() {
+//        return personServiceImpl.findAllPrueba();
+//    }
+
+
+
 }

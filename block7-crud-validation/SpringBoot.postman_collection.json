@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "67a9a1b8-3bbb-4d7b-b4fe-462d29c91844",
+		"name": "SpringBoot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear persona",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\": \"Persona1\",\r\n    \"password\": \"abc123.\",\r\n    \"name\": \"Ana\",\r\n    \"surname\": \"Suarez\",\r\n    \"company_email\": \"ana@gmail.com\",\r\n    \"personal_email\": \"anab@gmail.com\",\r\n    \"city\": \"Santiago\",\r\n    \"imagen_url\": \"perfil.jpg\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/persona",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"persona"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear profesor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_persona\":1,\r\n    \"comments\": \"Sabe Portugues\",\r\n    \"branch\": \"Ruby\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/profesor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profesor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear estudiante",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_persona\": 2,\r\n    \"num_hours_week\": 40,\r\n    \"comments\": \" Entre semana\",\r\n    \"id_profesor\": 1,\r\n    \"branch\": \"SQL\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/student",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear asignatura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"asignatura\": \"Prueba 2\",\r\n    \"comment\": \"Aprobado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/asignatura",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"asignatura"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear relacion estudiante-asignatura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/asignatura?id_student=1&id_asignatura=2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"asignatura"
+					],
+					"query": [
+						{
+							"key": "id_student",
+							"value": "1"
+						},
+						{
+							"key": "id_asignatura",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar relacion estudiante-asignatura",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/student/asignatura?id_student=1&id_asignatura=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"student",
+						"asignatura"
+					],
+					"query": [
+						{
+							"key": "id_student",
+							"value": "1"
+						},
+						{
+							"key": "id_asignatura",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener datos persona si es profesor o estudiante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/persona/1?outputType=full",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"persona",
+						"1"
+					],
+					"query": [
+						{
+							"key": "outputType",
+							"value": "full"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

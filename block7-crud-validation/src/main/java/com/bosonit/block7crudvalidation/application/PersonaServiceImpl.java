@@ -1,64 +1,104 @@
 package com.bosonit.block7crudvalidation.application;
 
-import com.bosonit.block7crudvalidation.controller.dto.PersonaInputDto;
-import com.bosonit.block7crudvalidation.controller.dto.PersonaOutputDto;
+import com.bosonit.block7crudvalidation.controller.dto.PersonaDTO;
+import com.bosonit.block7crudvalidation.controller.dto.PersonaProfessorListDTO;
 import com.bosonit.block7crudvalidation.domain.Persona;
+import com.bosonit.block7crudvalidation.domain.Professor;
+import com.bosonit.block7crudvalidation.domain.Student;
 import com.bosonit.block7crudvalidation.exceptions.EntityNotFoundException;
 import com.bosonit.block7crudvalidation.exceptions.UnprocessableEntityException;
+import com.bosonit.block7crudvalidation.application.mapper.PersonaMapper;
+import com.bosonit.block7crudvalidation.application.mapper.ProfessorMapper;
+import com.bosonit.block7crudvalidation.application.mapper.StudentMapper;
 import com.bosonit.block7crudvalidation.repository.PersonaRepository;
+import com.bosonit.block7crudvalidation.repository.ProfessorRepository;
+import com.bosonit.block7crudvalidation.repository.StudentRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class PersonaServiceImpl implements PersonaService{
 
     @Autowired
     PersonaRepository personaRepo;
+    @Autowired
+    StudentRepository studentRepo;
+    @Autowired
+    ProfessorRepository professorRepo;
 
-    public PersonaOutputDto addPersona(PersonaInputDto personaInputDto)   {
-        checkInputData(personaInputDto);
-        Persona persona = new Persona(personaInputDto);
+
+    PersonaMapper mapper = Mappers.getMapper(PersonaMapper.class);
+    StudentMapper mapperStudent= Mappers.getMapper(StudentMapper.class);
+    ProfessorMapper mapperProfessor = Mappers.getMapper(ProfessorMapper.class);
+
+    public PersonaDTO addPersona(PersonaDTO personaDto)   {
+        checkInputData(personaDto);
+        Persona persona = mapper.personaDtoToPersona(personaDto);
         personaRepo.save(persona);
-        return persona.personaToPersonaDto();
+        return mapper.personaToPersonaDTO(persona);
     }
 
-    public PersonaOutputDto getPersonaById(int id){
+    public PersonaDTO getPersonaById(int id){
         Persona persona = personaRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Person not found! Try another id"));
-        return persona.personaToPersonaDto();
+        return mapper.personaToPersonaDTO(persona);
     }
 
-    public PersonaOutputDto getPersonaByName(String name){
-        Persona persona = personaRepo.findByUsuario(name).orElseThrow(()-> new EntityNotFoundException("Person not found! Try another name"));
-        return persona.personaToPersonaDto();
+    public PersonaDTO getPersonaByName(String name){
+        Persona persona = personaRepo.findByName(name).orElseThrow(()-> new EntityNotFoundException("Person not found! Try another name"));
+        return mapper.personaToPersonaDTO(persona);
     }
 
-    public List<PersonaOutputDto> getAllPersonas(){
-         return personaRepo.findAll().stream().map(PersonaOutputDto::new).collect(Collectors.toList());
+    public List<PersonaDTO> getAllPersonas(){
+        return mapper.map(personaRepo.findAll());
     }
 
     public void deleteById(int id){
         personaRepo.deleteById(id);
     }
 
-    public PersonaOutputDto updatePersona(PersonaInputDto personaInputDto, int id){
+    public PersonaDTO updatePersona(PersonaDTO personaInputDto, int id){
         personaRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Person not found! Try another id"));
         checkInputData(personaInputDto);
-        Persona persona = new Persona(personaInputDto);
+        Persona persona = mapper.personaDtoToPersona(personaInputDto);
         persona.setId_persona(id);
         personaRepo.save(persona);
-        return persona.personaToPersonaDto();
+        return mapper.personaToPersonaDTO(persona);
     }
 
-
-    public void checkInputData(PersonaInputDto persona){
+    public void checkInputData(PersonaDTO persona){
         if(Objects.isNull(persona.getUsuario()) || persona.getUsuario().isBlank()){
             throw new UnprocessableEntityException("Username cant be null or empty");
         } else if(persona.getUsuario().length() > 10){
             throw new UnprocessableEntityException("Username length cannot be more than 10");
         }
+    }
+
+
+    public Optional<?> getStudentOrProfessorByIdPersona(int id){
+        //Obtengo student o professor mediante su id
+        Student student = studentRepo.findStudentByIdPersona(id);
+        Professor professor = professorRepo.findProfessorByIdPersona(id);
+        // Si estudiante no es null, mapea y envia sus datos
+        // Si estudiante es null, mapea y envia professor
+        return (!Objects.isNull(student)) ?
+                Optional.ofNullable(mapperStudent.studentToPersonaStudentDTO(student)) :
+                Optional.ofNullable(mapperProfessor.studentToPersonaProfessorDTO(professor));
+    }
+
+    public Optional<?> getStudentOrProfessorByName(String name){
+        //Obtengo student o professor mediante su id
+        Student student = studentRepo.findByName(name);
+        Professor professor = professorRepo.findByName(name);
+        // Si estudiante no es null, mapea y envia sus datos
+        // Si estudiante es null, mapea y envia professor
+        return (!Objects.isNull(student)) ?
+                Optional.ofNullable(mapperStudent.studentToPersonaStudentDTO(student)) :
+                Optional.ofNullable(mapperProfessor.studentToPersonaProfessorDTO(professor));
     }
 }

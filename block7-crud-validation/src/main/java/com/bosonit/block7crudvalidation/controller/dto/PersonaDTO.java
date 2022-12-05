@@ -1,5 +1,6 @@
 package com.bosonit.block7crudvalidation.controller.dto;
 
+import com.bosonit.block7crudvalidation.domain.Persona;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonaInputDto {
+public class PersonaDTO {
 
     int id_persona;
     String usuario;
@@ -21,5 +22,4 @@ public class PersonaInputDto {
     String personal_email;
     String city;
     String imagen_url;
-
 }
