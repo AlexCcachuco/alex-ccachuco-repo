@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/persona")
 public class PersonaController {
 
     @Autowired
@@ -22,11 +21,11 @@ public class PersonaController {
 
 
 
-    @PostMapping
+    @PostMapping(value = "/addperson")
     public ResponseEntity<PersonaDTO> addPerson(@RequestBody PersonaDTO personaInputDto)   {
          return ResponseEntity.ok(personServiceImpl.addPersona(personaInputDto));
     }
-    @GetMapping(value = "/name/{name}")
+    @GetMapping(value = "/persona/name/{name}")
     public ResponseEntity<?> getStudentOrProfessorByName(@PathVariable String name, @RequestParam(required = false) String outputType){
         if(outputType !=null && !outputType.isBlank()){
             if(outputType.equals("simple")){
@@ -38,7 +37,7 @@ public class PersonaController {
         return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaByName(name)));
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/getall")
     public List<PersonaDTO> getAll() {
         return personServiceImpl.getAllPersonas();
     }
@@ -49,13 +48,13 @@ public class PersonaController {
             personServiceImpl.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Deleted correctly!");
     }
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/persona/{id}")
     public ResponseEntity<PersonaDTO> update(@PathVariable int id, @RequestBody PersonaDTO personaDto){
             return ResponseEntity.ok().body(personServiceImpl.updatePersona(personaDto,id));
 
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/persona/{id}")
     public ResponseEntity<?> getStudentOrProfessorByIdPerson(@PathVariable int id, @RequestParam(required = false) String outputType){
         if(outputType !=null && !outputType.isBlank()){
             if(outputType.equals("simple")){
@@ -67,12 +66,12 @@ public class PersonaController {
         return ResponseEntity.ok().body(Optional.ofNullable(personServiceImpl.getPersonaById(id)));
     }
 
-     @GetMapping("/profesor/{id}")
+     @GetMapping("/persona/profesor/{id}")
     public ResponseEntity<ProfessorDTO> getProfesor(@PathVariable int id){
         return ResponseEntity.ok(personServiceImpl.getProfessorById(id));
     }
 
-    @GetMapping("/profesorFeign/{id}")
+    @GetMapping("/persona/profesorFeign/{id}")
     public ResponseEntity<ProfessorDTO> getProfesorByFeign(@PathVariable int id){
         return ResponseEntity.ok(personServiceImpl.getProfessorByIdFeign(id));
     }
