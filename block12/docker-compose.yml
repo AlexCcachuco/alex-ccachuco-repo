@@ -22,7 +22,24 @@ services:
       - queue
     depends_on:
       - zookeeper-server
-
+  kafka-producer:
+    image: "kafka/producer:latest"
+    networks:
+      - queue
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zookeeper-server
+      - kafka-server
+  kafka-consumer:
+      image: "kafka/consumer:latest"
+      networks:
+        - queue
+      ports:
+        - "8081:8081"
+      depends_on:
+        - zookeeper-server
+        - kafka-server
 networks:
   queue:
     driver: bridge
