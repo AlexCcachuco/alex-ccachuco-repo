@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "4bfde7dc-7109-4e9a-b7e6-c7ea2c33670b",
+		"name": "PersonMongo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/person",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"alex4\",\r\n    \"name\": \"Alexander\",\r\n    \"surname\": \"ccachuco\",\r\n    \"age\": 4,\r\n    \"email\": \"alex@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person/all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/person/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/person/639ca170c988d967b6e203b4",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/person/639ca170c988d967b6e203b4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person",
+						"639ca170c988d967b6e203b4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person/639ca1be976ee26abd1b451c",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"alex5Update\",\r\n    \"name\": \"Alexander5Updated\",\r\n    \"surname\": \"ccachuco5Updated\",\r\n    \"age\": 10,\r\n    \"email\": \"alex5Up@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/person/639ca1be976ee26abd1b451c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person",
+						"639ca1be976ee26abd1b451c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person/639c9cef85c21164a945ff38",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/person/639c9cea85c21164a945ff37",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person",
+						"639c9cea85c21164a945ff37"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
