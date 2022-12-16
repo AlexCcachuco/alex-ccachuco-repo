@@ -17,14 +17,18 @@ import com.bosonit.block7crudvalidation.repository.ProfessorRepository;
 import com.bosonit.block7crudvalidation.repository.StudentRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.time.LocalDate;
+import java.util.*;
+
+
 
 @Service
 public class PersonaServiceImpl implements PersonaService{
@@ -41,6 +45,9 @@ public class PersonaServiceImpl implements PersonaService{
 
     @Autowired
     IFeignProfessor feignProfessor;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     PersonaMapper mapper = Mappers.getMapper(PersonaMapper.class);
     StudentMapper mapperStudent= Mappers.getMapper(StudentMapper.class);
@@ -119,5 +126,50 @@ public class PersonaServiceImpl implements PersonaService{
     public ProfessorDTO getProfessorByIdFeign(int id){
         ProfessorDTO professorDTO = feignProfessor.callProfessor(id);
         return professorDTO;
+    }
+
+    public List<PersonaDTO> getCustomQuery(HashMap<String, Object> conditions){
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Persona> query = cb.createQuery(Persona.class);
+        Root<Persona> root = query.from(Persona.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+       conditions.forEach((field,value) -> {
+           switch (field){
+               case "usuario":
+                   predicates.add(cb.like(root.get(field), "%"+ (String) value + "%"));
+                   break;
+               case "name":
+                   predicates.add(cb.like(root.get(field), "%"+ (String) value + "%"));
+                   break;
+               case "surname":
+                   predicates.add(cb.like(root.get(field), "%"+ (String) value + "%"));
+                   break;
+               case "created_date":
+                   System.out.println(field.toString());
+                   System.out.println(value.toString());
+                   predicates.add(cb.greaterThan(root.<Date>get(field),(Date)value));
+                   break;
+           }
+           if(!Objects.isNull(field) && field.equals("order")){
+               switch (value.toString()){
+                   case "usuario":
+                       query.orderBy(cb.desc(root.get("usuario")));
+                       break;
+                   case "name":
+                       query.orderBy(cb.desc(root.get("name")));
+                       break;
+               }
+           }
+       });
+        query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+        return entityManager.createQuery(query).getResultList().stream().map(mapper::personaToPersonaDTO).toList();
+    }
+
+    public Page<PersonaDTO> findPersonByPage(int page, int pageSize){
+        Page<Persona> personaPages = personaRepo.findAll(PageRequest.of(page, pageSize));
+        return personaPages.map(mapper::personaToPersonaDTO);
     }
 }
