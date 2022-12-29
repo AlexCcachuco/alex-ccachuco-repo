@@ -19,6 +19,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,6 +50,8 @@ public class PersonaServiceImpl implements PersonaService{
     @PersistenceContext
     private EntityManager entityManager;
 
+    private PasswordEncoder passwordEncoder;
+
     PersonaMapper mapper = Mappers.getMapper(PersonaMapper.class);
     StudentMapper mapperStudent= Mappers.getMapper(StudentMapper.class);
     ProfessorMapper mapperProfessor = Mappers.getMapper(ProfessorMapper.class);
@@ -56,6 +59,7 @@ public class PersonaServiceImpl implements PersonaService{
     public PersonaDTO addPersona(PersonaDTO personaDto)   {
         checkInputData(personaDto);
         Persona persona = mapper.personaDtoToPersona(personaDto);
+        persona.setPassword(passwordEncoder.encode(persona.getPassword()));
         personaRepo.save(persona);
         return mapper.personaToPersonaDTO(persona);
     }

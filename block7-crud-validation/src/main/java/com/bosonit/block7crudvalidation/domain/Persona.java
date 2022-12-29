@@ -51,6 +51,9 @@ public class Persona {
     @Column(name = "termination_date", nullable = false)
     Date termination_date = new Date();
 
+    @Column(name = "admin", nullable = false)
+    boolean admin;
+
 //    public Persona(PersonaInputDto personaDtoToPersona){
 //        this.id_persona = personaDtoToPersona.getId_persona();
 //        this.usuario = personaDtoToPersona.getUsuario();
