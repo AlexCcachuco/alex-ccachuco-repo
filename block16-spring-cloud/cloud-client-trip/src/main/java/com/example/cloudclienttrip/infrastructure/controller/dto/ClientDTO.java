@@ -1,6 +1,6 @@
 package com.example.cloudclienttrip.infrastructure.controller.dto;
 
-import jakarta.persistence.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
