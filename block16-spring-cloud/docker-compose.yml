@@ -23,6 +23,39 @@ services:
     networks:
       - cloudNet
 
+  trip_spring:
+    image: cloud-trip
+    networks:
+      - cloudNet
+    ports:
+     - "8080:8080"
+    depends_on:
+      - tripdb
+
+  ticket_spring:
+    image: cloud-ticket
+    networks:
+      - cloudNet
+    ports:
+      - "8081:8081"
+    depends_on:
+      - ticketdb
+
+  eureka:
+    image: eureka-server
+    networks:
+      - cloudNet
+    ports:
+      - "8761:8761"
+
+  gateway:
+    image: api-gateway
+    networks:
+      - cloudNet
+    ports:
+      - "8082:8082"
+
+
 networks:
   cloudNet:
     driver: bridge
