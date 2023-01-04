@@ -1,0 +1,28 @@
+services:
+  ticketdb:
+    image: postgres:12
+    hostname: postgresql
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: contrasena
+      POSTGRES_DB: ticketdb
+
+    networks:
+      - cloudNet
+  tripdb:
+    image: mysql:5.7
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: 'password'
+        MYSQL_DATABASE: 'tripdb'
+    ports:
+        - '3306:3306'
+    networks:
+      - cloudNet
+
+networks:
+  cloudNet:
+    driver: bridge
